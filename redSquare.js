@@ -72,11 +72,13 @@ loop = function() {
 		rectangle.jumping = false;
 		rectangle.y = height - 32;
 		rectangle.dy = 0;
+		rectangle.dx *= 0.91;
 	}
 	
 	if(rectangle.y < 0) {
 		rectangle.y = 0;
 		rectangle.dy = 0;
+		rectangle.dx *= 0.91;
 	}
 	
 	if(rectangle.x < -32) {
