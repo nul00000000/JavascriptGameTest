@@ -92,7 +92,7 @@ loop = function() {
 	context.fillStyle = "#ff0000";
 	context.fillRect(rectangle.x, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#0000ff";
-	context.fillRect(rectangle.x + width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
+	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
 	window.requestAnimationFrame(loop);
 		
 };
