@@ -26,6 +26,7 @@ controller = {
 	left:false,
 	right:false,
 	up:false,
+	down:false;
 	keyListener:function(event) {
 		
 		var keyState = event.type == "keydown";
@@ -39,6 +40,9 @@ controller = {
 				controller.up = keyState;
 				break;
 			case 39:
+				controller.right = keyState;
+				break;
+			case 40:
 				controller.right = keyState;
 				break;
 		}
@@ -60,6 +64,9 @@ loop = function() {
 	
 	if(controller.right) {
 		rectangle.dx += 0.5;
+	}
+	if(controller.down) {
+		rectangle.dy += 1;
 	}
 	
 	rectangle.dy += 0.5;
