@@ -26,7 +26,7 @@ controller = {
 	left:false,
 	right:false,
 	up:false,
-	down:false;
+	down:false,
 	keyListener:function(event) {
 		
 		var keyState = event.type == "keydown";
