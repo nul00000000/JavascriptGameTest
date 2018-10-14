@@ -1,4 +1,4 @@
-var context, controller, rectangle, loop;
+var context, controller, rectangle, loop, trail;
 var width, height;
 
 context = document.querySelector("canvas").getContext("2d");
@@ -20,6 +20,11 @@ rectangle = {
 	dy:0
 	
 };
+
+trail = {
+	xs:[],
+	ys:[]
+}
 
 controller = {
 	
@@ -52,6 +57,9 @@ controller = {
 };
 
 loop = function() {
+	
+	trail.xs.push(rectangle.x);
+	trail.ys.push(rectangle.y);
 	
 	if(controller.up) {
 		rectangle.dy -= 1;
@@ -100,6 +108,11 @@ loop = function() {
 	context.fillRect(rectangle.x, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#0000ff";
 	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
+	context.fillStyle = "#888800";
+	var i;
+	for (i = 0; i < trail.xs.length; i++) { 
+    	context.fillRect(trail.xs[i] + rectangle.width / 2, trail.ys[i] + rectangle.height / 2, 1, 1);
+	}	
 	window.requestAnimationFrame(loop);
 		
 };
