@@ -59,12 +59,12 @@ controller = {
 loop = function() {
 	
 	var i;
-	for (i = xs.length; i > 1; i--) { 
-    	xs[i] = xs[i - 1];
-		ys[i] = ys[i - 1]
+	for (i = trail.xs.length; i > 1; i--) { 
+    	trail.xs[i] = trail.xs[i - 1];
+		trail.ys[i] = trail.ys[i - 1]
 	}
-	xs[0] = rectangle.x;
-	ys[0] = rectangle.y;
+	trail.xs[0] = rectangle.x;
+	trail.ys[0] = rectangle.y;
 	
 	if(controller.up) {
 		rectangle.dy -= 1;
@@ -114,7 +114,7 @@ loop = function() {
 	context.fillStyle = "#0000ff";
 	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#888800";
-	var i;
+	i = 0;
 	for (i = 0; i < trail.xs.length; i++) { 
     	context.fillRect(trail.xs[i] + rectangle.width / 2, trail.ys[i] + rectangle.height / 2, 1, 1);
 	}	
