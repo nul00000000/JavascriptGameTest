@@ -22,8 +22,8 @@ rectangle = {
 };
 
 trail = {
-	xs:[],
-	ys:[]
+	xs:new Array(20),
+	ys:new Array(20)
 }
 
 controller = {
@@ -58,8 +58,13 @@ controller = {
 
 loop = function() {
 	
-	trail.xs.push(rectangle.x);
-	trail.ys.push(rectangle.y);
+	var i;
+	for (i = xs.length; i > 1; i--) { 
+    	xs[i] = xs[i - 1];
+		ys[i] = ys[i - 1]
+	}
+	xs[0] = rectangle.x;
+	ys[0] = rectangle.y;
 	
 	if(controller.up) {
 		rectangle.dy -= 1;
