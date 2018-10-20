@@ -1,5 +1,8 @@
-var context, controller, rectangle, loop, trail;
+var context, controller, rectangle, loop;
 var width, height;
+var playerSprite = new Image(), nulSprite = new Image();
+playerSprite.src = "player.png";
+nulSprite.src = "RedditNul.png";
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -20,11 +23,6 @@ rectangle = {
 	dy:0
 
 };
-
-trail = {
-	xs:new Array(20),
-	ys:new Array(20)
-}
 
 controller = {
 
@@ -57,16 +55,8 @@ controller = {
 
 loop = function() {
 
-	var i;
-	for (i = trail.xs.length; i > 1; i--) {
-    	trail.xs[i] = trail.xs[i - 1];
-			trail.ys[i] = trail.ys[i - 1];
-	}
-	trail.xs[0] = rectangle.x;
-	trail.ys[0] = rectangle.y;
-
 	if(controller.up && !rectangle.jumping) {
-		rectangle.dy -= 20;
+		rectangle.dy -= 210;
 		rectangle.jumping = true;
 	}
 
@@ -88,13 +78,13 @@ loop = function() {
 		rectangle.jumping = false;
 		rectangle.y = height - 32;
 		rectangle.dy = 0;
-		rectangle.dx *= 0.91;
+		rectangle.dx *= 0.5;
 	}
 
 	if(rectangle.y < 0) {
 		rectangle.y = 0;
 		rectangle.dy = 0;
-		rectangle.dx *= 0.91;
+		rectangle.dx *= 0.5;
 	}
 
 	if(rectangle.x < -32) {
@@ -105,15 +95,8 @@ loop = function() {
 
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);
-	context.fillStyle = "#ff0000";
-	context.fillRect(rectangle.x, rectangle.y, rectangle.width / 2, rectangle.height);
-	context.fillStyle = "#0000ff";
-	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
-	context.fillStyle = "#888800";
-	i = 0;
-	for (i = 0; i < trail.xs.length; i++) {
-    	context.fillRect(trail.xs[i] + rectangle.width / 2, trail.ys[i] + rectangle.height / 2, 1, 1);
-	}
+  context.drawImage(playerSprite, 100, 100);
+
 	window.requestAnimationFrame(loop);
 
 };
