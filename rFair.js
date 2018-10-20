@@ -1,11 +1,12 @@
-var context, controller, rectangle, loop;
+var context, controller, rectangle, loop, nul;
 var width, height;
-var playerSprite = new Image(), nulSprite = new Image(), sky = new Image();
-playerSprite.src = "player.png";
+var nulSprite = new Image(), sky = new Image(), ground = new Image();
+var idle;
+var timer = 0;
+
 nulSprite.src = "RedditNul.png";
 sky.src = "sky.png";
-sky.width = width;
-sky.height = height;
+ground.src = "grass.png";
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -15,17 +16,33 @@ height = innerHeight - 20;
 context.canvas.height = height;
 context.canvas.width = width;
 
+idle = {
+  frames:[new Image(), new Image()],
+  frame:0,
+  draw:function() {
+    context.drawImage(idle.frames[idle.frame], rectangle.x, rectangle.y);
+  }
+}
+idle.frames[0].src = "player1.png";
+idle.frames[1].src = "player2.png";
+
 rectangle = {
 
 	height:64,
 	jumping:true,
 	width:64,
 	x:width / 2,
-	dx:0,
 	y:0,
 	dy:0
 
 };
+
+nul = {
+  height:164,
+	width:119,
+	x:width / 2 + 100,
+	y:height - 174,
+}
 
 controller = {
 
@@ -64,30 +81,26 @@ loop = function() {
 	}
 
 	if(controller.left) {
-		rectangle.dx -= 0.5;
+		rectangle.x -= 6;
 	}
 
 	if(controller.right) {
-		rectangle.dx += 0.5;
+		rectangle.x += 6;
 	}
 
 	rectangle.dy += 0.5;
-	rectangle.x += rectangle.dx;
 	rectangle.y += rectangle.dy;
-	rectangle.dx *= 0.99;
 	rectangle.dy *= 0.99;
 
-	if(rectangle.y > height - rectangle.height) {
+	if(rectangle.y > height - rectangle.height - 10) {
 		rectangle.jumping = false;
-		rectangle.y = height - rectanlge.height;
+		rectangle.y = height - rectangle.height - 10;
 		rectangle.dy = 0;
-		rectangle.dx *= 0.5;
 	}
 
 	if(rectangle.y < 0) {
 		rectangle.y = 0;
 		rectangle.dy = 0;
-		rectangle.dx *= 0.5;
 	}
 
 	if(rectangle.x < -rectangle.width) {
@@ -96,8 +109,17 @@ loop = function() {
 		rectangle.x = -rectangle.width;
 	}
 
-	context.fillRect(sky, 0, 0);
-  context.drawImage(playerSprite, rectangle.x, rectangle.y);
+  if(timer % 50 == 0) {
+    idle.frame++;
+  }
+  if(idle.frame >= 2) {
+    idle.frame = 0;
+  }
+	context.drawImage(sky, 0, 0, width, height);
+  context.drawImage(ground, 0, height - 10, width, 10);
+  context.drawImage(nulSprite, nul.x, nul.y);
+  idle.draw();
+  timer++;
 
 	window.requestAnimationFrame(loop);
 
