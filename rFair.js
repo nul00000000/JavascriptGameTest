@@ -1,8 +1,11 @@
 var context, controller, rectangle, loop;
 var width, height;
-var playerSprite = new Image(), nulSprite = new Image();
+var playerSprite = new Image(), nulSprite = new Image(), sky = new Image();
 playerSprite.src = "player.png";
 nulSprite.src = "RedditNul.png";
+sky.src = "sky.png";
+sky.width = width;
+sky.height = height;
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -14,9 +17,9 @@ context.canvas.width = width;
 
 rectangle = {
 
-	height:32,
+	height:64,
 	jumping:true,
-	width:32,
+	width:64,
 	x:width / 2,
 	dx:0,
 	y:0,
@@ -56,7 +59,7 @@ controller = {
 loop = function() {
 
 	if(controller.up && !rectangle.jumping) {
-		rectangle.dy -= 210;
+		rectangle.dy -= 10;
 		rectangle.jumping = true;
 	}
 
@@ -74,9 +77,9 @@ loop = function() {
 	rectangle.dx *= 0.99;
 	rectangle.dy *= 0.99;
 
-	if(rectangle.y > height - 32) {
+	if(rectangle.y > height - rectangle.height) {
 		rectangle.jumping = false;
-		rectangle.y = height - 32;
+		rectangle.y = height - rectanlge.height;
 		rectangle.dy = 0;
 		rectangle.dx *= 0.5;
 	}
@@ -87,15 +90,14 @@ loop = function() {
 		rectangle.dx *= 0.5;
 	}
 
-	if(rectangle.x < -32) {
+	if(rectangle.x < -rectangle.width) {
 		rectangle.x = width;
 	} else if(rectangle.x > width) {
-		rectangle.x = -32;
+		rectangle.x = -rectangle.width;
 	}
 
-	context.fillStyle = "#202020";
-	context.fillRect(0, 0, width, height);
-  context.drawImage(playerSprite, 100, 100);
+	context.fillRect(sky, 0, 0);
+  context.drawImage(playerSprite, rectangle.x, rectangle.y);
 
 	window.requestAnimationFrame(loop);
 
