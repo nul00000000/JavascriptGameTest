@@ -10,7 +10,7 @@ context.canvas.height = height;
 context.canvas.width = width;
 
 rectangle = {
-	
+
 	height:32,
 	jumping:true,
 	width:32,
@@ -18,7 +18,7 @@ rectangle = {
 	dx:0,
 	y:0,
 	dy:0
-	
+
 };
 
 trail = {
@@ -27,17 +27,17 @@ trail = {
 }
 
 controller = {
-	
+
 	left:false,
 	right:false,
 	up:false,
 	down:false,
 	keyListener:function(event) {
-		
+
 		var keyState = event.type == "keydown";
-		
+
 		switch(event.keyCode) {
-			
+
 			case 37:
 				controller.left = keyState;
 				break;
@@ -48,65 +48,65 @@ controller = {
 				controller.right = keyState;
 				break;
 			case 40:
-				controller.right = keyState;
+				controller.down = keyState;
 				break;
 		}
-		
+
 	}
-	
+
 };
 
 loop = function() {
-	
+
 	var i;
-	for (i = trail.xs.length; i > 1; i--) { 
+	for (i = trail.xs.length; i > 1; i--) {
     	trail.xs[i] = trail.xs[i - 1];
-		trail.ys[i] = trail.ys[i - 1]
+			trail.ys[i] = trail.ys[i - 1];
 	}
 	trail.xs[0] = rectangle.x;
 	trail.ys[0] = rectangle.y;
-	
+
 	if(controller.up) {
 		rectangle.dy -= 1;
 		rectangle.jumping = true;
 	}
-	
+
 	if(controller.left) {
 		rectangle.dx -= 0.5;
 	}
-	
+
 	if(controller.right) {
 		rectangle.dx += 0.5;
 	}
 	if(controller.down) {
 		rectangle.dy += 1;
 	}
-	
+
 	rectangle.dy += 0.5;
 	rectangle.x += rectangle.dx;
 	rectangle.y += rectangle.dy;
 	rectangle.dx *= 0.99;
 	rectangle.dy *= 0.99;
-	
+
 	if(rectangle.y > height - 32) {
 		rectangle.jumping = false;
 		rectangle.y = height - 32;
 		rectangle.dy = 0;
 		rectangle.dx *= 0.91;
 	}
-	
+
 	if(rectangle.y < 0) {
 		rectangle.y = 0;
 		rectangle.dy = 0;
 		rectangle.dx *= 0.91;
 	}
-	
+
 	if(rectangle.x < -32) {
 		rectangle.x = width;
 	} else if(rectangle.x > width) {
 		rectangle.x = -32;
 	}
-	
+
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);
 	context.fillStyle = "#ff0000";
@@ -115,20 +115,13 @@ loop = function() {
 	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#888800";
 	i = 0;
-	for (i = 0; i < trail.xs.length; i++) { 
+	for (i = 0; i < trail.xs.length; i++) {
     	context.fillRect(trail.xs[i] + rectangle.width / 2, trail.ys[i] + rectangle.height / 2, 1, 1);
-	}	
+	}
 	window.requestAnimationFrame(loop);
-		
+
 };
 
 window.addEventListener("keydown", controller.keyListener);
 window.addEventListener("keyup", controller.keyListener);
 window.requestAnimationFrame(loop);
-
-
-
-
-
-
-
