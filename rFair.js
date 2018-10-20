@@ -65,7 +65,7 @@ loop = function() {
 	trail.xs[0] = rectangle.x;
 	trail.ys[0] = rectangle.y;
 
-	if(controller.up && !jumping) {
+	if(controller.up && !rectangle.jumping) {
 		rectangle.dy -= 20;
 		rectangle.jumping = true;
 	}
