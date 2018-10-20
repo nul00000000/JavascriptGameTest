@@ -1,4 +1,4 @@
-var context, controller, rectangle, loop, nul;
+var context, controller, player, loop, nul;
 var width, height;
 var nulSprite = new Image(), sky = new Image(), ground = new Image();
 var idle;
@@ -20,20 +20,27 @@ idle = {
   frames:[new Image(), new Image()],
   frame:0,
   draw:function() {
-    context.drawImage(idle.frames[idle.frame], rectangle.x, rectangle.y);
+    if(!player.right) {
+      context.scale(-1, 1);
+      context.drawImage(idle.frames[idle.frame], -player.x - player.width, player.y);
+      if(!player.right) context.setTransform(1, 0, 0, 1, 0, 0);
+    } else {
+    context.drawImage(idle.frames[idle.frame], player.x, player.y);
+    }
   }
 }
 idle.frames[0].src = "player1.png";
 idle.frames[1].src = "player2.png";
 
-rectangle = {
+player = {
 
 	height:64,
 	jumping:true,
 	width:64,
 	x:width / 2,
 	y:0,
-	dy:0
+	dy:0,
+  right:true
 
 };
 
@@ -75,38 +82,40 @@ controller = {
 
 loop = function() {
 
-	if(controller.up && !rectangle.jumping) {
-		rectangle.dy -= 10;
-		rectangle.jumping = true;
+	if(controller.up && !player.jumping) {
+		player.dy -= 10;
+		player.jumping = true;
 	}
 
 	if(controller.left) {
-		rectangle.x -= 6;
+		player.x -= 6;
+    player.right = false;
 	}
 
 	if(controller.right) {
-		rectangle.x += 6;
+		player.x += 6;
+    player.right = true;
 	}
 
-	rectangle.dy += 0.5;
-	rectangle.y += rectangle.dy;
-	rectangle.dy *= 0.99;
+	player.dy += 0.5;
+	player.y += player.dy;
+	player.dy *= 0.99;
 
-	if(rectangle.y > height - rectangle.height - 10) {
-		rectangle.jumping = false;
-		rectangle.y = height - rectangle.height - 10;
-		rectangle.dy = 0;
+	if(player.y > height - player.height - 10) {
+		player.jumping = false;
+		player.y = height - player.height - 10;
+		player.dy = 0;
 	}
 
-	if(rectangle.y < 0) {
-		rectangle.y = 0;
-		rectangle.dy = 0;
+	if(player.y < 0) {
+		player.y = 0;
+		player.dy = 0;
 	}
 
-	if(rectangle.x < -rectangle.width) {
-		rectangle.x = width;
-	} else if(rectangle.x > width) {
-		rectangle.x = -rectangle.width;
+	if(player.x < -player.width) {
+		player.x = width;
+	} else if(player.x > width) {
+		player.x = -player.width;
 	}
 
   if(timer % 50 == 0) {
