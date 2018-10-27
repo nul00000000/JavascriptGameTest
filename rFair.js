@@ -3,11 +3,6 @@ var width, height;
 var nulSprite = new Image(), sky = new Image(), ground = new Image();
 var idle;
 var timer = 0;
-var gp;
-
-window.addEventListener("gamepadconnected", function(e) {
-  gp = e.gamepad.index;
-});
 
 nulSprite.src = "RedditNul.png";
 sky.src = "sky.png";
@@ -86,22 +81,19 @@ controller = {
 };
 
 loop = function() {
-  if(navigator.getGamepads()[gp]) {
-    controller.up = navigator.getGamepads()[gp].buttons[0].pressed;
-  }
 
 	if(controller.up && !player.jumping) {
 		player.dy -= 10;
 		player.jumping = true;
 	}
 
-	if(navigator.getGamepads()[gp].axes[0] < -0.1) {
-		player.x += navigator.getGamepads()[gp].axes[0] * 6;
+	if(controller.left) {
+		player.x -= 6;
     player.right = false;
 	}
 
-	if(navigator.getGamepads()[gp].axes[0] > 0.1) {
-		player.x += navigator.getGamepads()[gp].axes[0] * 6;
+	if(controller.right) {
+		player.x += 6;
     player.right = true;
 	}
 
