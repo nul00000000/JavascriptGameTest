@@ -21,11 +21,9 @@ context.canvas.width = width;
 
 lev1 = {
   draw:function() {
-    
+
   }
 }
-
-lev1.nulSprite.src = "RedditNul.png";
 
 idle = {
   frames:[new Image(), new Image()],
