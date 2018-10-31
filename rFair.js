@@ -20,15 +20,8 @@ context.canvas.height = height;
 context.canvas.width = width;
 
 lev1 = {
-  nulSprite:new Image(),
-  nul:{
-    height:164,
-  	width:119,
-  	x:width / 2 + 100,
-  	y:height - 174,
-  },
   draw:function() {
-    context.drawImage(lev1.nulSprite, lev1.nul.x, lev1.nul.y);
+    
   }
 }
 
