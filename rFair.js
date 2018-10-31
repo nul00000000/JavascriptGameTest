@@ -1,12 +1,15 @@
-var context, controller, player, loop, nul;
+var context, controller, player, loop;
 var width, height;
-var nulSprite = new Image(), sky = new Image(), ground = new Image();
+var sky = new Image(), ground = new Image();
+var jump = new Image();
 var idle;
 var timer = 0;
+var level = 0;
+var lev1;
 
-nulSprite.src = "RedditNul.png";
 sky.src = "sky.png";
 ground.src = "grass.png";
+jump.src = "playerJump.png";
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -15,6 +18,21 @@ height = innerHeight - 20;
 
 context.canvas.height = height;
 context.canvas.width = width;
+
+lev1 = {
+  nulSprite:new Image(),
+  nul:{
+    height:164,
+  	width:119,
+  	x:width / 2 + 100,
+  	y:height - 174,
+  },
+  draw:function() {
+    context.drawImage(lev1.nulSprite, lev1.nul.x, lev1.nul.y);
+  }
+}
+
+lev1.nulSprite.src = "RedditNul.png";
 
 idle = {
   frames:[new Image(), new Image()],
@@ -43,13 +61,6 @@ player = {
   right:true
 
 };
-
-nul = {
-  height:164,
-	width:119,
-	x:width / 2 + 100,
-	y:height - 174,
-}
 
 controller = {
 
@@ -126,8 +137,20 @@ loop = function() {
   }
 	context.drawImage(sky, 0, 0, width, height);
   context.drawImage(ground, 0, height - 10, width, 10);
-  context.drawImage(nulSprite, nul.x, nul.y);
-  idle.draw();
+  if(level == 0) {
+    lev1.draw();
+  }
+  if(!player.jumping) {
+    idle.draw();
+  } else {
+    if(!player.right) {
+      context.scale(-1, 1);
+      context.drawImage(jump, -player.x - player.width, player.y);
+      if(!player.right) context.setTransform(1, 0, 0, 1, 0, 0);
+    } else {
+    context.drawImage(jump, player.x, player.y);
+    }
+  }
   timer++;
 
 	window.requestAnimationFrame(loop);
