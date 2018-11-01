@@ -39,8 +39,10 @@ lev2 = {
   draw:function() {
     pdidle.draw();
     if(lev2.showpd1) {
-      console.log("yeet");
       context.drawImage(lev2.pd1, 0, 0);
+    }
+    if(lev2.showpd2) {
+      context.drawImage(lev2.pd2, 0, 0)
     }
   }
 }
@@ -51,12 +53,18 @@ lev2.pd2.src = "pd2.png";
 house = {
   inside:new Image(),
   mother:new Image(),
+  m1:new Image(),
+  show: false,
   draw:function() {
     context.drawImage(house.inside, 0, 0);
     context.drawImage(house.mother, width - 200, height - 74);
+    if(house.show) {
+      context.drawImage(house.m1, 0, 0);
+    }
   }
 }
 
+house.m1.src = "m1.png";
 house.inside.src = "house.png";
 house.mother.src = "mother.png";
 
@@ -194,6 +202,8 @@ loop = function() {
       level = -8;
     } else if(level == -8 && Math.abs((player.x - 120) - (width / 4)) <= player.width * 2 && Math.abs(player.y - (height - 120)) <= player.height) {
       level = 0;
+    } else if(level == -8 && Math.abs((player.x) - (width - 200)) <= player.width && Math.abs(player.y - (height - 120)) <= player.height) {
+      player.sick = true;
     }
     if(level == 1 && !player.sick && Math.abs((player.x) - (width / 2)) <= player.width && Math.abs(player.y - (height - 72)) <= player.height) {
       lev2.showpd1 = true;
