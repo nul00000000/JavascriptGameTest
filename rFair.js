@@ -1,11 +1,11 @@
-var context, controller, player, loop;
+var context, controller, player, loop, plaguedoctor;
 var width, height;
 var sky = new Image(), ground = new Image();
 var jump = new Image();
-var idle;
+var idle, pdidle;
 var timer = 0;
 var level = 0;
-var lev1;
+var lev1, lev2, house;
 
 sky.src = "sky.png";
 ground.src = "grass.png";
@@ -20,10 +20,51 @@ context.canvas.height = height;
 context.canvas.width = width;
 
 lev1 = {
+  house:new Image(),
+  sign:new Image(),
   draw:function() {
-
+    context.drawImage(lev1.house, width / 3, height - 266);
+    context.drawImage(lev1.sign, width - 200, height - 138);
   }
 }
+
+lev1.house.src = "renhouse.png";
+lev1.sign.src = "sign.png";
+
+lev2 = {
+  draw:function() {
+    pdidle.draw();
+  }
+}
+
+house = {
+  inside:new Image(),
+  mother:new Image(),
+  draw:function() {
+    context.drawImage(house.inside, 0, 0);
+    context.drawImage(house.mother, width - 200, height - 74);
+  }
+}
+
+house.inside.src = "house.png";
+house.mother.src = "mother.png";
+
+pdidle = {
+  frames:[new Image(), new Image()],
+  frame:0,
+  draw:function() {
+    console.log("drawing");
+    if(!plaguedoctor.right) {
+      context.scale(-1, 1);
+      context.drawImage(pdidle.frames[pdidle.frame], -plaguedoctor.x - plaguedoctor.width, plaguedoctor.y);
+      context.setTransform(1, 0, 0, 1, 0, 0);
+    } else {
+    context.drawImage(pdidle.frames[pdidle.frame], plaguedoctor.x, plaguedoctor.y);
+    }
+  }
+}
+pdidle.frames[0].src = "plaguedoctor1.png";
+pdidle.frames[1].src = "plaguedoctor2.png";
 
 idle = {
   frames:[new Image(), new Image()],
@@ -53,11 +94,22 @@ player = {
 
 };
 
+plaguedoctor = {
+  height:64,
+	jumping:true,
+	width:64,
+	x:width / 2,
+	y:height - 10 - 64,
+	dy:0,
+  right:false
+};
+
 controller = {
 
 	left:false,
 	right:false,
 	up:false,
+  space:false,
 	keyListener:function(event) {
 
 		var keyState = event.type == "keydown";
@@ -73,6 +125,9 @@ controller = {
 			case 39:
 				controller.right = keyState;
 				break;
+      case 32:
+        controller.space = keyState;
+        break;
 			// case 40:
 			// 	controller.down = keyState;
 			// 	break;
@@ -115,21 +170,39 @@ loop = function() {
 	}
 
 	if(player.x < -player.width) {
+    level--;
 		player.x = width;
 	} else if(player.x > width) {
+    level++;
 		player.x = -player.width;
 	}
 
+  if(controller.space) {
+    if(level == 0 && Math.abs((player.x - 280) - (width / 3)) <= player.width && Math.abs(player.y - (height - 120)) <= player.height) {
+      level = -8;
+    } else if(level == -8 && Math.abs((player.x - 120) - (width / 4)) <= player.width * 2 && Math.abs(player.y - (height - 120)) <= player.height) {
+      level = 0;
+    }
+  }
+
   if(timer % 50 == 0) {
     idle.frame++;
+    pdidle.frame++;
   }
   if(idle.frame >= 2) {
     idle.frame = 0;
+  }
+  if(pdidle.frame >= 2) {
+    pdidle.frame = 0;
   }
 	context.drawImage(sky, 0, 0, width, height);
   context.drawImage(ground, 0, height - 10, width, 10);
   if(level == 0) {
     lev1.draw();
+  } else if(level == 1) {
+    lev2.draw();
+  } else if(level == -8) {
+    house.draw();
   }
   if(!player.jumping) {
     idle.draw();
