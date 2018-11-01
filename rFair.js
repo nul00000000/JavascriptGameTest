@@ -87,19 +87,32 @@ pdidle.frames[1].src = "plaguedoctor2.png";
 
 idle = {
   frames:[new Image(), new Image()],
+  sframes:[new Image(), new Image()],
   frame:0,
   draw:function() {
-    if(!player.right) {
-      context.scale(-1, 1);
-      context.drawImage(idle.frames[idle.frame], -player.x - player.width, player.y);
-      if(!player.right) context.setTransform(1, 0, 0, 1, 0, 0);
+    if(!player.sick) {
+      if(!player.right) {
+        context.scale(-1, 1);
+        context.drawImage(idle.frames[idle.frame], -player.x - player.width, player.y);
+        if(!player.right) context.setTransform(1, 0, 0, 1, 0, 0);
+      } else {
+      context.drawImage(idle.frames[idle.frame], player.x, player.y);
+      }
     } else {
-    context.drawImage(idle.frames[idle.frame], player.x, player.y);
+      if(!player.right) {
+        context.scale(-1, 1);
+        context.drawImage(idle.sframes[idle.frame], -player.x - player.width, player.y);
+        if(!player.right) context.setTransform(1, 0, 0, 1, 0, 0);
+      } else {
+      context.drawImage(idle.sframes[idle.frame], player.x, player.y);
+    }
     }
   }
 }
 idle.frames[0].src = "player1.png";
 idle.frames[1].src = "player2.png";
+idle.sframes[0].src = "playersick1.png";
+idle.sframes[1].src = "playersick2.png";
 
 player = {
 
@@ -204,6 +217,9 @@ loop = function() {
       level = 0;
     } else if(level == -8 && Math.abs((player.x) - (width - 200)) <= player.width && Math.abs(player.y - (height - 120)) <= player.height) {
       player.sick = true;
+      house.show = true;
+    } else {
+      house.show = false;
     }
     if(level == 1 && !player.sick && Math.abs((player.x) - (width / 2)) <= player.width && Math.abs(player.y - (height - 72)) <= player.height) {
       lev2.showpd1 = true;
