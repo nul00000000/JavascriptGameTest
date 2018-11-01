@@ -32,10 +32,21 @@ lev1.house.src = "renhouse.png";
 lev1.sign.src = "sign.png";
 
 lev2 = {
+  showpd1:false,
+  showpd2:false,
+  pd1:new Image(),
+  pd2:new Image(),
   draw:function() {
     pdidle.draw();
+    if(lev2.showpd1) {
+      console.log("yeet");
+      context.drawImage(lev2.pd1, 0, 0);
+    }
   }
 }
+
+lev2.pd1.src = "pd1.png";
+lev2.pd2.src = "pd2.png";
 
 house = {
   inside:new Image(),
@@ -90,7 +101,8 @@ player = {
 	x:width / 2,
 	y:0,
 	dy:0,
-  right:true
+  right:true,
+  sick:false
 
 };
 
@@ -178,10 +190,18 @@ loop = function() {
 	}
 
   if(controller.space) {
-    if(level == 0 && Math.abs((player.x - 280) - (width / 3)) <= player.width && Math.abs(player.y - (height - 120)) <= player.height) {
+    if(level == 0 && Math.abs((player.x) - (width / 2)) <= player.width && Math.abs(player.y - (height - 120)) <= player.height) {
       level = -8;
     } else if(level == -8 && Math.abs((player.x - 120) - (width / 4)) <= player.width * 2 && Math.abs(player.y - (height - 120)) <= player.height) {
       level = 0;
+    }
+    if(level == 1 && !player.sick && Math.abs((player.x) - (width / 2)) <= player.width && Math.abs(player.y - (height - 72)) <= player.height) {
+      lev2.showpd1 = true;
+    } else if(level == 1 && player.sick && Math.abs((player.x) - (width / 2)) <= player.width && Math.abs(player.y - (height - 72)) <= player.height) {
+      lev2.showpd2 = true;
+    } else {
+      lev2.showpd1 = false;
+      lev2.showpd2 = false;
     }
   }
 
