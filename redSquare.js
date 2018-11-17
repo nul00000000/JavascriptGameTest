@@ -1,5 +1,6 @@
-var context, controller, rectangle, loop, trail;
+var context, controller, rectangle, loop;
 var width, height;
+var score = 0, coinX = 0, coinY = 0, monster;
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -8,6 +9,25 @@ height = innerHeight - 20;
 
 context.canvas.height = height;
 context.canvas.width = width;
+
+class Monster {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	update(rx, ry) {
+		this.x += Math.sign(rx - this.x) * 5;
+		this.y += Math.sign(ry - this.y) * 5;
+	}
+
+	draw(ctx) {
+		ctx.fillStyle = "#45ee12";
+		ctx.fillRect(this.x - 20, this.y - 20, 80, 80);
+	}
+}
+
+monster = new Monster(100, 100);
 
 rectangle = {
 
@@ -20,11 +40,6 @@ rectangle = {
 	dy:0
 
 };
-
-trail = {
-	xs:new Array(20),
-	ys:new Array(20)
-}
 
 controller = {
 
@@ -57,14 +72,6 @@ controller = {
 };
 
 loop = function() {
-
-	var i;
-	for (i = trail.xs.length; i > 1; i--) {
-    	trail.xs[i] = trail.xs[i - 1];
-			trail.ys[i] = trail.ys[i - 1];
-	}
-	trail.xs[0] = rectangle.x;
-	trail.ys[0] = rectangle.y;
 
 	if(controller.up) {
 		rectangle.dy -= 1;
@@ -107,6 +114,8 @@ loop = function() {
 		rectangle.x = -32;
 	}
 
+	monster.update(rectangle.x, rectangle.y);
+
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);
 	context.fillStyle = "#ff0000";
@@ -114,10 +123,7 @@ loop = function() {
 	context.fillStyle = "#0000ff";
 	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#888800";
-	i = 0;
-	for (i = 0; i < trail.xs.length; i++) {
-    	context.fillRect(trail.xs[i] + rectangle.width / 2, trail.ys[i] + rectangle.height / 2, 1, 1);
-	}
+	monster.draw(context);
 	window.requestAnimationFrame(loop);
 
 };
