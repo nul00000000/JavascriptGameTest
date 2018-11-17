@@ -1,6 +1,6 @@
 var context, controller, rectangle, loop;
 var width, height;
-var score = 0, coinX = 0, coinY = 0, monster;
+var score = 0, coinX = 0, coinY = 0, monster, highscore = 0;
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -17,17 +17,26 @@ class Monster {
 	}
 
 	update(rx, ry) {
-		this.x += Math.sign(rx - this.x) * 5;
-		this.y += Math.sign(ry - this.y) * 5;
+		//this.x += Math.sign(rx - this.x) * 5;
+		//this.y += Math.sign(ry - this.y) * 5;
+		this.x += (rx - this.x) / 20;
+		this.y += (ry - this.y) / 20;
 	}
 
 	draw(ctx) {
 		ctx.fillStyle = "#45ee12";
 		ctx.fillRect(this.x - 20, this.y - 20, 80, 80);
 	}
+
+	checkCollide(x, y, w, h) {
+		return x < this.x + 60 && x > this.x - 20 - w && y < this.y + 60 && y > this.y - 20 - h;
+	}
 }
 
 monster = new Monster(100, 100);
+
+coinX = Math.random() * (width - 41);
+coinY = Math.random() * (height - 41);
 
 rectangle = {
 
@@ -114,16 +123,36 @@ loop = function() {
 		rectangle.x = -32;
 	}
 
+	if(rectangle.x < coinX + 40 && rectangle.x > coinX - rectangle.width && rectangle.y < coinY + 40 && rectangle.y > coinY - rectangle.height) {
+		score++;
+		coinX = Math.random() * (width - 41);
+		coinY = Math.random() * (height - 41);
+	}
+
 	monster.update(rectangle.x, rectangle.y);
+
+	if(monster.checkCollide(rectangle.x, rectangle.y, rectangle.width, rectangle.height)) {
+		score = 0;
+	}
+
+	if(highscore < score) {
+		highscore = score;
+	}
 
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);
+	context.fillStyle = "#ffff00";
+	context.fillRect(coinX, coinY, 40, 40);
 	context.fillStyle = "#ff0000";
 	context.fillRect(rectangle.x, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#0000ff";
 	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#888800";
 	monster.draw(context);
+	context.fillStyle = "#ffffff";
+	context.font = "30px Arial";
+	context.fillText("Score: " + score, 100, 100);
+	context.fillText("Highscore: " + highscore, 800, 100);
 	window.requestAnimationFrame(loop);
 
 };
