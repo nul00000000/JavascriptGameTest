@@ -1,6 +1,6 @@
 var context, controller, rectangle, loop;
 var width, height;
-var score = 0, coinX = 0, coinY = 0, monster, highscore = 0;
+var score = 0, coinX = 0, coinY = 0, monster;
 var gamepad;
 
 context = document.querySelector("canvas").getContext("2d");
@@ -141,10 +141,6 @@ loop = function() {
 		score = 0;
 	}
 
-	if(highscore < score) {
-		highscore = score;
-	}
-
 	if(score > localStorage.getItem("high")) {
 		localStorage.setItem("high", score);
 	}
@@ -162,8 +158,7 @@ loop = function() {
 	context.fillStyle = "#ffffff";
 	context.font = "30px Arial";
 	context.fillText("Score: " + score, 100, 100);
-	context.fillText("Highscore: " + highscore, 800, 100);
-	context.fillText("Global Highscore: " + localStorage.getItem("high"), 100, height - 100);
+	context.fillText("Highscore: " + localStorage.getItem("high"), 100, height - 100);
 	window.requestAnimationFrame(loop);
 
 };
