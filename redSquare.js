@@ -145,6 +145,10 @@ loop = function() {
 		highscore = score;
 	}
 
+	if(score > localStorage.getItem("high")) {
+		localStorage.setItem("high", score);
+	}
+
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);
 	context.fillStyle = "#ffff00";
@@ -159,6 +163,7 @@ loop = function() {
 	context.font = "30px Arial";
 	context.fillText("Score: " + score, 100, 100);
 	context.fillText("Highscore: " + highscore, 800, 100);
+	context.fillText("Global Highscore: " + localStorage.getItem("high"), 100, height - 100);
 	window.requestAnimationFrame(loop);
 
 };
