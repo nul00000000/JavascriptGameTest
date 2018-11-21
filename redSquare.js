@@ -1,6 +1,7 @@
 var context, controller, rectangle, loop;
 var width, height;
 var score = 0, coinX = 0, coinY = 0, monster, highscore = 0;
+var gamepad;
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -17,8 +18,6 @@ class Monster {
 	}
 
 	update(rx, ry) {
-		//this.x += Math.sign(rx - this.x) * 5;
-		//this.y += Math.sign(ry - this.y) * 5;
 		this.x += (rx - this.x) / 20;
 		this.y += (ry - this.y) / 20;
 	}
@@ -98,6 +97,13 @@ loop = function() {
 		rectangle.dy += 1;
 	}
 
+	if(gamepad != null && !controller.right && !controller.left) {
+		rectangle.dx += navigator.getGamepads()[gamepad].axes[0] / 1.5;
+	}
+	if(gamepad != null && !controller.up && !controller.down) {
+		rectangle.dy += navigator.getGamepads()[gamepad].axes[1];
+	}
+
 	rectangle.dy += 0.5;
 	rectangle.x += rectangle.dx;
 	rectangle.y += rectangle.dy;
@@ -157,6 +163,10 @@ loop = function() {
 
 };
 
+window.addEventListener("gamepadconnected", function(e) {
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", e.gamepad.index, e.gamepad.id, e.gamepad.buttons.length, e.gamepad.axes.length);
+	gamepad = e.gamepad.index;
+});
 window.addEventListener("keydown", controller.keyListener);
 window.addEventListener("keyup", controller.keyListener);
 window.requestAnimationFrame(loop);
