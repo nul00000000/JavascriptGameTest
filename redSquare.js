@@ -2,6 +2,7 @@ var context, controller, rectangle, loop;
 var width, height;
 var score = 0, coinX = 0, coinY = 0, monster;
 var gamepad;
+var bulletX, bulletY, bulletDX = 0, bulletDY = 0;
 
 context = document.querySelector("canvas").getContext("2d");
 
@@ -72,6 +73,10 @@ controller = {
 				break;
 			case 40:
 				controller.down = keyState;
+				break;
+			case 32:
+				bulletX = rectangle.x;
+				bulletY = rectangle.y;
 				break;
 		}
 
@@ -155,6 +160,8 @@ loop = function() {
 	context.fillRect(rectangle.x + rectangle.width / 2, rectangle.y, rectangle.width / 2, rectangle.height);
 	context.fillStyle = "#888800";
 	monster.draw(context);
+	context.fillStyle = "#999999";
+	context.fillRect(bulletX, bulletY, 10, 10);
 	context.fillStyle = "#ffffff";
 	context.font = "30px Arial";
 	context.fillText("Score: " + score, 100, 100);
