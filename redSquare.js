@@ -81,6 +81,10 @@ controller = {
 		}
 
 	}
+        touchListener:function(event) {
+                rectangle.x = event.touches[0].clientX;
+                rectangle.y = event.touches[0].clientY;
+        }
 
 };
 
@@ -176,4 +180,5 @@ window.addEventListener("gamepadconnected", function(e) {
 });
 window.addEventListener("keydown", controller.keyListener);
 window.addEventListener("keyup", controller.keyListener);
+window.addEventListener("ontouchstart", controller.touchListener);
 window.requestAnimationFrame(loop);
